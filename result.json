@@ -1,0 +1,22 @@
+{
+  "participantId": "JL001",
+  "testName": "Conjunction Search",
+  "trials": [
+    {
+      "reactionTime": 10000000,
+      "correct": false
+    },
+    {
+      "reactionTime": 99999,
+      "correct": true
+    },
+    {
+      "reactionTime": 10030,
+      "correct": false
+    },
+    {
+      "reactionTime": 10030,
+      "correct": false
+    }
+  ]
+}
