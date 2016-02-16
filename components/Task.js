@@ -40,15 +40,15 @@ class Task extends Component {
 
 
             const numberPadding = 0;
-            const numberOfItems = 20;
+            const numberOfItems = this.props.setSize;
 
             for (var i = 1; i <= numberOfItems; i++) {
                 var allNodesBeforeNewNode = svg.selectAll("text");
                 var newNode = svg.append("svg:text")
                     .attr("x", this.randomIntFromInterval(edgePadding, width - edgePadding)).attr("y", this.randomIntFromInterval(edgePadding, height - edgePadding))
                     .attr("fill", "white")
-                    .style("font-size", "70px")
-                    .style("font-family", "sans-serif")
+                    .style("font-size", this.props.taskType.elementHeight + "px")
+                    .style("font-family", "Arial, Helvetica, sans-serif")
                     .text(this.props.targetPresent && i == 1 ? "2" : "5");
                 var overlaps = false;
                 allNodesBeforeNewNode.each(function (d, i) {
@@ -70,14 +70,14 @@ class Task extends Component {
 
         } else {
             const linePadding = 20;
-            const numberOfLines = 20;
+            const numberOfLines = this.props.setSize / 2;
 
             const redLine = this.props.targetPresent ? this.randomIntFromInterval(1, numberOfLines) : null
             for (var rowIndex = 1; rowIndex <= numberOfLines; rowIndex++) {
                 var allNodesBeforeNewNode = svg.selectAll("rect");
                 var newNode = svg.append("svg:rect")
-                    .attr("x", this.randomIntFromInterval(edgePadding, width - (edgePadding + 100))).attr("y", this.randomIntFromInterval(edgePadding, height - (edgePadding + 20)))
-                    .attr("height", 20).attr("width", 100)
+                    .attr("x", this.randomIntFromInterval(edgePadding, width - (edgePadding + this.props.taskType.longLength))).attr("y", this.randomIntFromInterval(edgePadding, height - (edgePadding + this.props.taskType.shortLength)))
+                    .attr("height", this.props.taskType.shortLength).attr("width", this.props.taskType.longLength)
                     .attr("fill", rowIndex !== redLine ? "green" : "red");
                 var overlaps = false;
                 allNodesBeforeNewNode.each(function (d, i) {
@@ -99,8 +99,8 @@ class Task extends Component {
             for (var columnIndex = 1; columnIndex <= numberOfLines; columnIndex++) {
                 var allNodesBeforeNewNode = svg.selectAll("rect");
                 var newNode = svg.append("svg:rect")
-                    .attr("x", this.randomIntFromInterval(edgePadding, width - (edgePadding + 20))).attr("y", this.randomIntFromInterval(edgePadding, height - (edgePadding + 100)))
-                    .attr("height", 100).attr("width", 20)
+                    .attr("x", this.randomIntFromInterval(edgePadding, width - (edgePadding + this.props.taskType.shortLength))).attr("y", this.randomIntFromInterval(edgePadding, height - (edgePadding + this.props.taskType.longLength)))
+                    .attr("height", this.props.taskType.longLength).attr("width", this.props.taskType.shortLength)
                     .attr("fill", "red");
                 var overlaps = false;
                 allNodesBeforeNewNode.each(function (d, i) {

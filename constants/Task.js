@@ -10,8 +10,8 @@ export const TASK_TYPES = [{
     'Please try and respond to each screen as quickly and as accurately as possible. ' +
     'Prior to each screen you will be shown a screen with a white fixation cross. This will indicate that a new screen is about to appear.<br/>' +
     'Press either <kbd>/</kbd> or <kbd>z</kbd> to begin.<br/>',
-    elementWidth: 80,
-    elementHeight: 15
+    longLength: 80,
+    shortLength: 15
 }, {
     id: 2,
     title: 'Spatial-configuration Search',
