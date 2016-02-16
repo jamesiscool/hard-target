@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { response } from '../actions/actions'
-import * as TaskTypes from '../constants/TaskTypes'
+import * as TaskTypes from '../constants/Task'
 import d3 from 'd3'
 
 

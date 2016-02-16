@@ -1,7 +1,7 @@
-import React, { Component, PropTypes } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import IdInput from '../components/IdInput'
+import React, {Component, PropTypes} from 'react'
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+import Setup from '../components/Setup'
 import Ready from '../components/Ready'
 import Task from '../components/Task'
 import Fixation from '../components/Fixation'
@@ -9,11 +9,11 @@ import * as AppStates from '../constants/AppStates'
 
 class App extends Component {
     render() {
-        const { appState } = this.props
+        const {appState} = this.props
         var component
         switch (appState) {
-            case AppStates.ID_INPUT:
-                component = <IdInput/>;
+            case AppStates.SETUP:
+                component = <Setup/>;
                 break;
             case AppStates.READY:
                 component = <Ready/>;

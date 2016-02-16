@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {response} from '../actions/actions'
-import * as TaskTypes from '../constants/TaskTypes'
+import * as TaskTypes from '../constants/Task'
 import d3 from 'd3'
 var classNames = require('classnames');
 
@@ -12,6 +12,7 @@ class Task extends Component {
     }
 
     handelOnKeyPress(e) {
+        e.preventDefault();
         if (e.keyCode == 47) {
             this.props.response(true);
         } else if (e.keyCode == 122) {
@@ -30,12 +31,13 @@ class Task extends Component {
     }
 
     componentWillReceiveProps() {
-        const svg = d3.select("svg");
-        const width = svg.style("width") !== "0px" ? parseInt(svg.style("width"), 10) : 2146; //svg.style("width") doesn't work with webpack dev server so use defaults
-        const height = svg.style("height") !== "0px" ? parseInt(svg.style("height"), 10) : 1251; //svg.style("height") doesn't work with webpack dev server so use defaults
+        const svg = d3.select("svg")
+        svg.selectAll("*").remove()
+        const width = svg.style("width") !== "0px" ? parseInt(svg.style("width"), 10) : 1920; //svg.style("width") doesn't work with webpack dev server so use defaults
+        const height = svg.style("height") !== "0px" ? parseInt(svg.style("height"), 10) : 1080; //svg.style("height") doesn't work with webpack dev server so use defaults
         const edgePadding = 50;
-        if (this.props.taskType === TaskTypes.CONJUNCTION_SEARCH) {
-            svg.selectAll("*").remove()
+        if (this.props.taskType.title === "Spatial-configuration Search") {
+
 
             const numberPadding = 0;
             const numberOfItems = 20;
@@ -134,17 +136,18 @@ class Task extends Component {
 
 Task.propTypes = {
     targetPresent: PropTypes.bool.isRequired,
-    taskType: PropTypes.string.isRequired,
+    taskType: PropTypes.object.isRequired,
+    startTime: PropTypes.number.isRequired,
+    setSize: PropTypes.number.isRequired,
     response: PropTypes.func.isRequired,
-    startTime: PropTypes.number.isRequired
 }
 
 function mapStateToProps(state) {
-    console.log(state)
     return {
         targetPresent: state.currentTask.targetPresent,
         taskType: state.taskType,
-        startTime: state.currentTask.startTime
+        startTime: state.currentTask.startTime,
+        setSize: state.currentTask.setSize
     }
 }
 

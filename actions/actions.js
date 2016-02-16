@@ -1,12 +1,15 @@
-import {TASK_TYPE_ORDER} from '../constants/TaskTypes'
+import {TRIALS_PER_SESSION} from '../constants/Task'
 import * as AppStates from '../constants/AppStates'
+import {randomIntFromInterval} from '../utils/util'
+var path = require('path')
 var fs = require('fs')
 
-export const SET_PARTICIPANT_ID = 'SET_PARTICIPANT_ID'
-export function setParticipantId(participantId) {
+export const START = 'START'
+export function start(participantId, selectedTaskTypes) {
     return {
-        type: SET_PARTICIPANT_ID,
-        participantId
+        type: START,
+        participantId,
+        selectedTaskTypes
     }
 }
 export const SET_APP_STATE = 'SET_APP_STATE'
@@ -19,7 +22,6 @@ export function setAppState(state) {
 
 export function userReady() {
     return dispatch => {
-        dispatch(nextTaskType())
         dispatch(startFixation())
     }
 }
@@ -36,44 +38,61 @@ export function startFixation() {
         dispatch(dispatch(setAppState(AppStates.FIXATION)))
         setTimeout(() => {
             dispatch(finishFixation());
-        }, 500)
+        }, 5)
     }
 }
 
-export const FINISH_FIXATION = 'FINISH_FIXATION'
-export function finishFixation() {
+export const NEXT_TASK = 'NEXT_TASK'
+export function nextTask(setSize) {
     return {
-        type: FINISH_FIXATION,
+        type: NEXT_TASK,
         targetPresent: Math.random() < .5,
-        startTime: Date.now()
+        startTime: Date.now(),
+        setSize: setSize
+    }
+}
+
+export function finishFixation() {
+    return (dispatch, getState) => {
+        const state = getState()
+        const stillAvailableSetSizes = state.setSizePool.filter((setSize) => {
+            return setSize.occurrencesLeft > 0
+        })
+        const setSize = stillAvailableSetSizes[randomIntFromInterval(0, stillAvailableSetSizes.length - 1)].size
+        dispatch(nextTask(setSize))
     }
 }
 
 
 function logResponsesToFile(state) {
-    console.log("Log to file:")
-    console.log(state)
     var data = '';
     state.results.forEach(result => {
         data = data + state.participantId + ',' + state.taskType + ',' + new Date() + ',' + result.responseTime + ',' + result.correct + '\n'
     });
-    console.log(data)
-    fs.appendFile('data.csv', data, function (err) {
-
-    });
+    if (global.window.nwDispatcher) {
+        var nwPath = process.execPath;
+        var nwDir = path.dirname(nwPath)
+        fs.appendFile(nwDir + '\\data.csv', data, function (err) {
+            console.log(err)
+        })
+    } else {
+        console.log("Log to file:")
+        console.log(state)
+    }
 }
 
-const trialsPerSession = 20
+
 export function response(targetPresent) {
     return (dispatch, getState) => {
-        const state = getState();
         dispatch(addResponseToState(targetPresent))
-        if (state.results.length === trialsPerSession) {
+        const state = getState();
+        if (state.results.length >= TRIALS_PER_SESSION) {
             logResponsesToFile(state)
-            if (TASK_TYPE_ORDER.indexOf(state.taskType) + 1 < TASK_TYPE_ORDER.length) {
+            if (state.taskTypesToTest.indexOf(state.taskType) < state.taskTypesToTest.length - 1) {
+                dispatch(nextTaskType())
                 dispatch(setAppState(AppStates.READY))
             } else {
-                dispatch(setAppState(AppStates.ID_INPUT))
+                dispatch(setAppState(AppStates.SETUP))
             }
         } else {
             dispatch(startFixation())
