@@ -82,7 +82,9 @@ export default function reducers(state = initialState, action) {
                 results: [...state.results,
                     {
                         responseTime: action.finishTime - state.currentTask.startTime,
-                        correct: state.currentTask.targetPresent === action.targetPresent
+                        correct: state.currentTask.targetPresent === action.targetPresent,
+                        targetPresent: state.currentTask.targetPresent,
+                        setSize: state.currentTask.setSize
                     }]
             }
         default:

@@ -67,7 +67,7 @@ export function finishFixation() {
 function logResponsesToFile(state) {
     var data = '';
     state.results.forEach(result => {
-        data = data + state.participantId + ',' + state.taskType + ',' + new Date() + ',' + result.responseTime + ',' + result.correct + '\n'
+        data = data + state.participantId + ',' + state.taskType + ',' + new Date() + ',' + result.responseTime + ',' + result.correct + ',' + result.targetPresent + ',' + result.setSize + '\n'
     });
     if (global.window.nwDispatcher) {
         var nwPath = process.execPath;
@@ -77,7 +77,7 @@ function logResponsesToFile(state) {
         })
     } else {
         console.log("Log to file:")
-        console.log(state)
+        console.log(data)
     }
 }
 
