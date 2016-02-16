@@ -76,6 +76,14 @@ export default function reducers(state = initialState, action) {
                     setSize: action.setSize
                 }
             }
+        case Action.FINISH_RENDERING:
+            return {
+                ...state,
+                currentTask: {
+                    ...state.currentTask,
+                    startTime: action.startTime
+                }
+            }
         case Action.ADD_RESPONSE_TO_STATE:
             return {
                 ...state,

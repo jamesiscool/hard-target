@@ -52,6 +52,14 @@ export function nextTask(setSize) {
     }
 }
 
+export const FINISH_RENDERING = 'FINISH_RENDERING'
+export function finishRendering() {
+    return {
+        type: FINISH_RENDERING,
+        startTime: Date.now()
+    }
+}
+
 export function finishFixation() {
     return (dispatch, getState) => {
         const state = getState()
@@ -65,6 +73,7 @@ export function finishFixation() {
 
 
 function logResponsesToFile(state) {
+    const header = 'Participant Id,TaskType,Set Completion DateTime,Response Time,Correct Response,Target Present,Set Size'
     var data = '';
     state.results.forEach(result => {
         data = data + state.participantId + ',' + state.taskType + ',' + new Date() + ',' + result.responseTime + ',' + result.correct + ',' + result.targetPresent + ',' + result.setSize + '\n'
@@ -72,11 +81,18 @@ function logResponsesToFile(state) {
     if (global.window.nwDispatcher) {
         var nwPath = process.execPath;
         var nwDir = path.dirname(nwPath)
-        fs.appendFile(nwDir + '\\data.csv', data, function (err) {
-            console.log(err)
-        })
+        const path = nwDir + '\\data.csv'
+        fs.access(path, fs.F_OK, function (err) {
+            if (!err) {
+                data = header + data
+            }
+            fs.appendFile(path, data, function (err) {
+                alert(err)
+            })
+        });
+
     } else {
-        console.log("Log to file:")
+        console.log("Write to data file:")
         console.log(data)
     }
 }

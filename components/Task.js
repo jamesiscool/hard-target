@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import {response} from '../actions/actions'
+import {response, finishRendering} from '../actions/actions'
 import * as TaskTypes from '../constants/Task'
 import d3 from 'd3'
 var classNames = require('classnames');
@@ -91,7 +91,6 @@ class Task extends Component {
                     }
                 })
                 if (overlaps) {
-                    console.log("they overlap")
                     newNode.remove()
                     rowIndex--
                 }
@@ -114,7 +113,6 @@ class Task extends Component {
                     }
                 })
                 if (overlaps) {
-                    console.log("they overlap")
                     newNode.remove()
                     columnIndex--
                 }
@@ -140,6 +138,7 @@ Task.propTypes = {
     startTime: PropTypes.number.isRequired,
     setSize: PropTypes.number.isRequired,
     response: PropTypes.func.isRequired,
+    finishRendering: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
@@ -153,5 +152,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    {response}
+    {response, finishRendering}
 )(Task)

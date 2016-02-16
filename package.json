@@ -6,6 +6,7 @@
     "fullscreen": false
   },
   "version": "0.0.0",
+  "chromium-args": "--mixed-context",
   "description": "Redux TodoMVC example",
   "repository": {
     "type": "git",
