@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "main": "index.html",
   "window": {
-    "toolbar": true,
+    "toolbar": false,
     "fullscreen": false
   },
   "chromium-args": "--mixed-context"

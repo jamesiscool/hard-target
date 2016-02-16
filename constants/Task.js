@@ -22,5 +22,5 @@ export const TASK_TYPES = [{
     elementHeight: 46
 }]
 export const SET_SIZES = [10, 20, 30, 40]
-export const TRIALS_PER_SESSION = 4
-export const FIXATION_DURATION= 500 //ms
+export const TRIALS_PER_SESSION = 100
+export const FIXATION_DURATION = 500 //ms

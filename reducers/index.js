@@ -42,6 +42,7 @@ export default function reducers(state = initialState, action) {
                 setSizePool: SET_SIZES.map((setSize) => {
                     return {size: setSize, occurrencesLeft: TRIALS_PER_SESSION / SET_SIZES.length}
                 }),
+                targetPresentPool: [{present: true, occurrencesLeft: TRIALS_PER_SESSION / 2}, {present: false, occurrencesLeft: TRIALS_PER_SESSION / 2}],
                 results: []
             }
         case Action.SET_APP_STATE:
@@ -56,19 +57,24 @@ export default function reducers(state = initialState, action) {
                 results: [],
                 setSizePool: SET_SIZES.map((setSize) => {
                     return {size: setSize, occurrencesLeft: TRIALS_PER_SESSION / SET_SIZES.length}
-                })
+                }),
+                targetPresentPool: [{present: true, occurrencesLeft: TRIALS_PER_SESSION / 2}, {present: false, occurrencesLeft: TRIALS_PER_SESSION / 2}],
             }
         case Action.NEXT_TASK:
-            const newSetSizePool = state.setSizePool.map((setSize) => {
-                const occurrencesLeft = setSize.size === action.setSize ? --setSize.occurrencesLeft : setSize.occurrencesLeft;
-                return {
-                    ...setSize,
-                    occurrencesLeft: occurrencesLeft
-                }
-            })
             return {
                 ...state,
-                setSizePool: newSetSizePool,
+                setSizePool: state.setSizePool.map((setSize) => {
+                    return {
+                        ...setSize,
+                        occurrencesLeft: setSize.size === action.setSize ? --setSize.occurrencesLeft : setSize.occurrencesLeft
+                    }
+                }),
+                targetPresentPool: state.targetPresentPool.map((targetPresent) => {
+                    return {
+                        ...targetPresent,
+                        occurrencesLeft: targetPresent.present === action.targetPresent ? --targetPresent.occurrencesLeft : targetPresent.occurrencesLeft
+                    }
+                }),
                 appState: AppStates.TESTING,
                 currentTask: {
                     targetPresent: action.targetPresent,

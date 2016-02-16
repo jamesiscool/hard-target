@@ -4,8 +4,17 @@ import {randomIntFromInterval} from '../utils/util'
 var path = require('path')
 var fs = require('fs')
 
+function setFullscreen(fullscreen) {
+    if (global.window.nwDispatcher) {
+        var nw = global.window.nwDispatcher.requireNwGui();
+        var win = nw.Window.get();
+        win.isFullscreen = fullscreen
+    }
+}
+
 export const START = 'START'
 export function start(participantId, selectedTaskTypes) {
+    setFullscreen(true);
     return {
         type: START,
         participantId,
@@ -43,10 +52,10 @@ export function startFixation() {
 }
 
 export const NEXT_TASK = 'NEXT_TASK'
-export function nextTask(setSize) {
+export function nextTask(setSize, targetPresent) {
     return {
         type: NEXT_TASK,
-        targetPresent: Math.random() < .5,
+        targetPresent: targetPresent,
         startTime: Date.now(),
         setSize: setSize
     }
@@ -67,7 +76,13 @@ export function finishFixation() {
             return setSize.occurrencesLeft > 0
         })
         const setSize = stillAvailableSetSizes[randomIntFromInterval(0, stillAvailableSetSizes.length - 1)].size
-        dispatch(nextTask(setSize))
+
+        const stillAvailableTargetPresents = state.targetPresentPool.filter((targetPresent) => {
+            return targetPresent.occurrencesLeft > 0
+        })
+        const targetPresent = stillAvailableTargetPresents[randomIntFromInterval(0, stillAvailableTargetPresents.length - 1)].present
+
+        dispatch(nextTask(setSize, targetPresent))
     }
 }
 
@@ -107,6 +122,7 @@ export function response(targetPresent) {
                 dispatch(nextTaskType())
                 dispatch(setAppState(AppStates.READY))
             } else {
+                setFullscreen(false)
                 dispatch(setAppState(AppStates.SETUP))
             }
         } else {
