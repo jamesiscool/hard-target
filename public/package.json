@@ -1,10 +1,10 @@
 {
   "name": "hard-target",
+  "version": "0.0.0",
   "main": "index.html",
   "window": {
     "toolbar": true,
     "fullscreen": false
   },
-  "version": "0.0.0",
   "chromium-args": "--mixed-context"
 }

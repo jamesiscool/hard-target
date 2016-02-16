@@ -1,4 +1,4 @@
-import {TRIALS_PER_SESSION} from '../constants/Task'
+import {TRIALS_PER_SESSION, FIXATION_DURATION} from '../constants/Task'
 import * as AppStates from '../constants/AppStates'
 import {randomIntFromInterval} from '../utils/util'
 var path = require('path')
@@ -38,7 +38,7 @@ export function startFixation() {
         dispatch(dispatch(setAppState(AppStates.FIXATION)))
         setTimeout(() => {
             dispatch(finishFixation());
-        }, 5)
+        }, FIXATION_DURATION)
     }
 }
 
@@ -73,27 +73,26 @@ export function finishFixation() {
 
 
 function logResponsesToFile(state) {
-    const header = 'Participant Id,TaskType,Set Completion DateTime,Response Time,Correct Response,Target Present,Set Size'
+    const header = 'Participant Id,TaskType,Set Completion DateTime,Response Time,Correct Response,Target Present,Set Size\n'
     var data = '';
     state.results.forEach(result => {
-        data = data + state.participantId + ',' + state.taskType + ',' + new Date() + ',' + result.responseTime + ',' + result.correct + ',' + result.targetPresent + ',' + result.setSize + '\n'
+        data = data + state.participantId + ',' + state.taskType.title + ',' + new Date() + ',' + result.responseTime + ',' + result.correct + ',' + result.targetPresent + ',' + result.setSize + '\n'
     });
+    console.log("Write to data file:")
+    console.log(data)
     if (global.window.nwDispatcher) {
         var nwPath = process.execPath;
-        var nwDir = path.dirname(nwPath)
-        const path = nwDir + '\\data.csv'
-        fs.access(path, fs.F_OK, function (err) {
-            if (!err) {
+        var nwDir = path.dirname(nwPath);
+        const dataPath = nwDir + '\\data.csv'
+        fs.access(dataPath, fs.F_OK, function (err) {
+            if (err) {
                 data = header + data
             }
-            fs.appendFile(path, data, function (err) {
-                alert(err)
+            fs.appendFile(dataPath, data, function (appendErr) {
+                console.log(appendErr)
             })
         });
 
-    } else {
-        console.log("Write to data file:")
-        console.log(data)
     }
 }
 

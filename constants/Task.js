@@ -23,3 +23,4 @@ export const TASK_TYPES = [{
 }]
 export const SET_SIZES = [10, 20, 30, 40]
 export const TRIALS_PER_SESSION = 4
+export const FIXATION_DURATION= 500 //ms
