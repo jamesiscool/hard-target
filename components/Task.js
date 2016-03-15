@@ -48,7 +48,7 @@ class Task extends Component {
                     .attr("x", this.randomIntFromInterval(edgePadding, width - edgePadding)).attr("y", this.randomIntFromInterval(edgePadding, height - edgePadding))
                     .attr("fill", "white")
                     .style("font-size", this.props.taskType.elementHeight + "px")
-                    .style("font-family", "Arial, Helvetica, sans-serif")
+                    .style("font-family", "Digital")
                     .text(this.props.targetPresent && i == 1 ? "2" : "5");
                 var overlaps = false;
                 allNodesBeforeNewNode.each(function (d, i) {

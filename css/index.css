@@ -17,3 +17,8 @@ svg {
     display: flex;
     align-items: center;
 }
+
+@font-face {
+    font-family: 'Digital';
+    src: url('../fonts/digital-7.ttf');
+}
